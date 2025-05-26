@@ -1,0 +1,14 @@
+:schedule:
+  cache_all_cities:
+    #cron: "0 * * * *" # a cada hora
+    cron: "0 0 1 * *" # todo dia 1 do mês à meia-noite
+    class: "CitiesJob"
+    args:
+      - null
+      - all: true
+  cache_teresina:
+    cron: "*/10 * * * *" # a cada 10 minutos
+    class: "CitiesJob"
+    args:
+      - "Teresina"
+      - all: false

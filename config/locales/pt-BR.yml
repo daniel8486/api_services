@@ -1,0 +1,9 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            role:
+              only_one_admin_allowed: "Só é permitido criar o primeiro admin via API. Novos admins só podem ser criados por um admin já cadastrado."
+              client_cannot_sign_up: "Cliente não pode ser criado via sign up. Apenas usuários autenticados podem criar clientes."
