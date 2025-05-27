@@ -59,6 +59,7 @@ jobs:
       PGUSER: postgres
       PGPASSWORD: password
       DATABASE_URL: postgres://postgres:password@localhost:5432/test
+      DEVISE_JWT_SECRET_KEY: ${{ secrets.DEVISE_JWT_SECRET_KEY }}
 
       # redis:
       #   image: redis
