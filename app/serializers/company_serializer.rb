@@ -4,4 +4,5 @@ class CompanySerializer
              :opening_date, :public_place, :number, :complement, :code_postal,
              :neighborhood, :municipality, :uf, :email, :phone, :country
   has_many :users, serializer: UserSerializer
+  has_many :clients, serializer: ClientSerializer
 end

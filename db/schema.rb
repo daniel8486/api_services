@@ -10,9 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_26_162552) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_27_163626) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "code_postal"
+    t.string "neighborhood"
+    t.string "city"
+    t.string "state"
+    t.string "street"
+    t.string "complement"
+    t.string "point_reference"
+    t.integer "number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "client_id", null: false
+    t.index ["client_id"], name: "index_addresses_on_client_id"
+  end
+
+  create_table "affiliations", force: :cascade do |t|
+    t.string "nm_mother"
+    t.string "nm_father"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "client_id", null: false
+    t.index ["client_id"], name: "index_affiliations_on_client_id"
+  end
 
   create_table "cities", force: :cascade do |t|
     t.integer "code"
@@ -29,6 +53,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_162552) do
     t.string "cep_end"
     t.string "name_ibge"
     t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "cpf"
+    t.string "rg"
+    t.date "dt_expedition"
+    t.string "organ"
+    t.string "phone"
+    t.string "cellphone"
+    t.date "dt_born"
+    t.string "nationality"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "companies", force: :cascade do |t|
@@ -52,6 +91,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_162552) do
     t.string "country"
   end
 
+  create_table "degree_dependents", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "dependents", force: :cascade do |t|
+    t.string "name"
+    t.string "cpf"
+    t.date "dt_born"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "client_id", null: false
+    t.index ["client_id"], name: "index_dependents_on_client_id"
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.string "document_n"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "document"
+  end
+
   create_table "neighborhoods", force: :cascade do |t|
     t.string "name"
     t.bigint "city_id", null: false
@@ -68,6 +130,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_162552) do
     t.string "region"
     t.float "latitude"
     t.float "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "type_documents", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -105,7 +173,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_162552) do
     t.index ["neighborhood_id"], name: "index_zips_on_neighborhood_id"
   end
 
+  add_foreign_key "addresses", "clients"
+  add_foreign_key "affiliations", "clients"
   add_foreign_key "cities", "states"
+  add_foreign_key "dependents", "clients"
   add_foreign_key "neighborhoods", "cities"
   add_foreign_key "users", "companies"
   add_foreign_key "zips", "cities"
