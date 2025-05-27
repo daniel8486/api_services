@@ -13,7 +13,7 @@
       <img src="./assets/0.13.1/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" class="hide">
-      <div class="timestamp">Generated <abbr class="timeago" title="2025-05-27T10:12:23-03:00">2025-05-27T10:12:23-03:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2025-05-27T11:44:46-03:00">2025-05-27T11:44:46-03:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -22,7 +22,7 @@
     <span class="group_name">All Files</span>
     (<span class="covered_percent">
       <span class="red">
-  6.8%
+  6.78%
 </span>
 
      </span>
@@ -42,11 +42,11 @@
   </div>
 
   <div class="t-line-summary">
-    <b>544</b> relevant lines,
+    <b>546</b> relevant lines,
     <span class="green"><b>37</b> lines covered</span> and
-    <span class="red"><b>507</b> lines missed. </span>
+    <span class="red"><b>509</b> lines missed. </span>
     (<span class="red">
-  6.8%
+  6.78%
 </span>
 )
   </div>
@@ -402,10 +402,10 @@
           <tr class="t-file">
             <td class="strong t-file__name"><a href="#211265b1da97b47e1b718099960168cf5c421f07" class="src_link" title="app/services/jwt_service.rb">app/services/jwt_service.rb</a></td>
             <td class="red strong cell--number t-file__coverage">0.00 %</td>
+            <td class="cell--number">13</td>
             <td class="cell--number">12</td>
-            <td class="cell--number">10</td>
             <td class="cell--number">0</td>
-            <td class="cell--number">10</td>
+            <td class="cell--number">12</td>
             <td class="cell--number">0.00</td>
             
           </tr>
@@ -1081,7 +1081,7 @@
     <span class="group_name">Ungrouped</span>
     (<span class="covered_percent">
       <span class="red">
-  2.24%
+  2.21%
 </span>
 
      </span>
@@ -1101,11 +1101,11 @@
   </div>
 
   <div class="t-line-summary">
-    <b>134</b> relevant lines,
+    <b>136</b> relevant lines,
     <span class="green"><b>3</b> lines covered</span> and
-    <span class="red"><b>131</b> lines missed. </span>
+    <span class="red"><b>133</b> lines missed. </span>
     (<span class="red">
-  2.24%
+  2.21%
 </span>
 )
   </div>
@@ -1230,10 +1230,10 @@
           <tr class="t-file">
             <td class="strong t-file__name"><a href="#211265b1da97b47e1b718099960168cf5c421f07" class="src_link" title="app/services/jwt_service.rb">app/services/jwt_service.rb</a></td>
             <td class="red strong cell--number t-file__coverage">0.00 %</td>
+            <td class="cell--number">13</td>
             <td class="cell--number">12</td>
-            <td class="cell--number">10</td>
             <td class="cell--number">0</td>
-            <td class="cell--number">10</td>
+            <td class="cell--number">12</td>
             <td class="cell--number">0.00</td>
             
           </tr>
@@ -9498,9 +9498,9 @@
     
 
     <div class="t-line-summary">
-      <b>10</b> relevant lines.
+      <b>12</b> relevant lines.
       <span class="green"><b>0</b> lines covered</span> and
-      <span class="red"><b>10</b> lines missed.</span>
+      <span class="red"><b>12</b> lines missed.</span>
     </div>
 
     
@@ -9526,7 +9526,7 @@
 
             
 
-            <code class="ruby">  SECRET = Rails.application.credentials.devise_jwt_secret_key!</code>
+            <code class="ruby">  ALGORITHM = &quot;HS256&quot;</code>
           </li>
         </div>
       
@@ -9536,17 +9536,17 @@
 
             
 
-            <code class="ruby">  ALGORITHM = &quot;HS256&quot;</code>
+            <code class="ruby">  def self.secret</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="4">
+          <li class="missed" data-hits="0" data-linenumber="4">
             
 
             
 
-            <code class="ruby"></code>
+            <code class="ruby">    ENV[&quot;DEVISE_JWT_SECRET_KEY&quot;].presence || Rails.application.credentials.devise_jwt_secret_key!</code>
           </li>
         </div>
       
@@ -9556,7 +9556,7 @@
 
             
 
-            <code class="ruby">  def self.decode(token, verify_exp = true)</code>
+            <code class="ruby">  end</code>
           </li>
         </div>
       
@@ -9566,7 +9566,7 @@
 
             
 
-            <code class="ruby">    JWT.decode(token, SECRET, verify_exp, { algorithm: ALGORITHM })</code>
+            <code class="ruby">  def self.decode(token, verify_exp = true)</code>
           </li>
         </div>
       
@@ -9576,12 +9576,22 @@
 
             
 
+            <code class="ruby">    JWT.decode(token, SECRET, verify_exp, { algorithm: ALGORITHM })</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="8">
+            
+
+            
+
             <code class="ruby">  end</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="8">
+          <li class="never" data-hits="" data-linenumber="9">
             
 
             
@@ -9591,7 +9601,7 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="9">
+          <li class="missed" data-hits="0" data-linenumber="10">
             
 
             
@@ -9601,7 +9611,7 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="10">
+          <li class="missed" data-hits="0" data-linenumber="11">
             
 
             
@@ -9611,7 +9621,7 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="11">
+          <li class="missed" data-hits="0" data-linenumber="12">
             
 
             
@@ -9621,7 +9631,7 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="12">
+          <li class="missed" data-hits="0" data-linenumber="13">
             
 
             
