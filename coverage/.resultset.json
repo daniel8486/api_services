@@ -730,50 +730,50 @@
         ],
         "branches": {}
       },
-      "/Users/danielmatos-pro/www/api_services/back_end/app/models/ability.rb": {
-        "lines": [
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          null,
-          0,
-          null,
-          0,
-          null,
-          0,
-          null,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0
-        ],
-        "branches": {}
-      },
       "/Users/danielmatos-pro/www/api_services/back_end/app/models/zip.rb": {
         "lines": [
           0,
           0,
           0,
           null,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/danielmatos-pro/www/api_services/back_end/app/policies/ability.rb": {
+        "lines": [
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          null,
+          0,
+          null,
+          0,
+          null,
+          0,
+          null,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
           0
         ],
         "branches": {}
@@ -950,6 +950,6 @@
         "branches": {}
       }
     },
-    "timestamp": 1748291262
+    "timestamp": 1748351543
   }
 }
