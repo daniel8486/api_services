@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_27_163626) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_28_124114) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -68,6 +68,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_27_163626) do
     t.string "nationality"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id", null: false
+    t.index ["company_id"], name: "index_clients_on_company_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -104,7 +106,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_27_163626) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id", null: false
+    t.bigint "degree_dependent_id", null: false
     t.index ["client_id"], name: "index_dependents_on_client_id"
+    t.index ["degree_dependent_id"], name: "index_dependents_on_degree_dependent_id"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -112,6 +116,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_27_163626) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "document"
+    t.bigint "type_document_id", null: false
+    t.string "files"
+    t.integer "client_id"
+    t.index ["type_document_id"], name: "index_documents_on_type_document_id"
   end
 
   create_table "neighborhoods", force: :cascade do |t|
@@ -176,7 +184,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_27_163626) do
   add_foreign_key "addresses", "clients"
   add_foreign_key "affiliations", "clients"
   add_foreign_key "cities", "states"
+  add_foreign_key "clients", "companies"
   add_foreign_key "dependents", "clients"
+  add_foreign_key "dependents", "degree_dependents"
+  add_foreign_key "documents", "type_documents"
   add_foreign_key "neighborhoods", "cities"
   add_foreign_key "users", "companies"
   add_foreign_key "zips", "cities"

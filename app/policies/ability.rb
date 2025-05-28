@@ -22,6 +22,7 @@ class Ability
       can [ :read, :update ], User, id: user.id
       # User pode criar clientes para sua empresa
       can :create, User, role: "client", company_id: user.company_id
+      can [ :read, :create ], Client, company_id: user.company_id
 
     elsif user.client?
       # Cliente só pode ler/atualizar o próprio cadastro

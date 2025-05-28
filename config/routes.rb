@@ -30,6 +30,8 @@ Rails.application.routes.draw do
 
       resources :companies, only: [ :create ]
 
+      resources :clients
+
       get "is_valid_token", to: "sessions#is_valid_token"
       match "*unmatched", to: "errors#not_found", via: :all
     end

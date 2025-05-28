@@ -60,10 +60,53 @@ require 'csv'
 #   )
 # end
 
+if User.exists?
+  puts "Usuários já existem, pulando criação de usuários."
+else
+  puts "Criando usuários padrão..."
+  User.create!(
+    email: "superroot@superadmin.com",
+    password: "123456789123131",
+    cpf: "12345678901",
+    role: 4, # super_root
+  )
+end
 
-User.create!(
-  email: "superroot@superadmin.com",
-  password: "123456789123131",
-  cpf: "12345678901",
-  role: 4, # super_root
-)
+if DegreeDependent.exists?
+  puts "Graus de parentesco já existem, pulando criação de graus."
+  degree_dependents = []
+else
+  puts "Criando graus de parentesco padrão..."
+  degree_dependents = [
+    { description: 'Filho' },
+    { description: 'Pai' },
+    { description: 'Mãe' },
+    { description: 'Sobrinho' },
+    { description: 'Outros - Não Especificados' }
+  ]
+end
+
+degree_dependents.each do |dependent|
+  DegreeDependent.find_or_create_by!(dependent)
+end
+
+if TypeDocument.exists?
+  puts "Tipos de documentos já existem, pulando criação de tipos."
+  type_documents = []
+else
+  puts "Criando Tipos de Documentos Padrões..."
+  type_documents = [
+    { name: 'CPF' },
+    { name: 'RG - FRENTE' },
+    { name: 'RG - VERSO' },
+    { name: 'CNH' },
+    { name: 'Passaporte' },
+    { name: 'Comprovante de Endereço' },
+    { name: 'Outros - Não Especificados' },
+    { name: 'Todos acima em PDF' }
+  ]
+end
+
+type_documents.each do |document|
+  TypeDocument.find_or_create_by!(document)
+end

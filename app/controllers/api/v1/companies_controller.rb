@@ -3,7 +3,7 @@ before_action :authenticate_user!
 before_action :authorize_admin!, only: [ :create ]
 
 def authorize_admin!
-  render json: { error: "Acesso negado" }, status: :forbidden unless current_user.admin? || current_user.super_admin?
+  render json: { error: "Acesso negado" }, status: :forbidden unless current_user.admin? || current_user.super_admin? || current_user.super_root?
 end
   # POST /api/v1/companies
   def create
