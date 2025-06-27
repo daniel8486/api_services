@@ -5,4 +5,5 @@ class CompanySerializer
              :neighborhood, :municipality, :uf, :email, :phone, :country
   has_many :users, serializer: UserSerializer
   has_many :clients, serializer: ClientSerializer
+  has_many :contracts
 end

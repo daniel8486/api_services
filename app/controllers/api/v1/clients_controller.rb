@@ -16,9 +16,11 @@ class Api::V1::ClientsController < ApplicationController
       ]
     ).serializable_hash
 
+    Rails.logger.info "INCLUDED TYPES: #{result[:included]&.map { |item| item[:type] }&.uniq}"
+
     # Ordena o included conforme desejado
     if result[:included]
-      order = %w[dependent affiliation address document type_document company]
+      order = %w[dependents affiliations addresses documents type_documents companies]
       result[:included].sort_by! { |item| order.index(item[:type]) || 99 }
     end
 

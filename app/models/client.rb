@@ -13,5 +13,8 @@ class Client < ApplicationRecord
 
   belongs_to :company
 
+  has_many :contracts
+  has_many :cash_register_transactions
+
   validates :cpf, presence: true, uniqueness: true, format: { with: /\A\d{11}\z/, message: "Must contain exactly 11 numeric digits." }
 end

@@ -1,19 +1,30 @@
 class Api::V1::CompaniesController < ApplicationController
+load_and_authorize_resource
 before_action :authenticate_user!
-before_action :authorize_admin!, only: [ :create ]
+before_action :authorize_admin!
+include JsonResponse
 
 def authorize_admin!
   render json: { error: "Acesso negado" }, status: :forbidden unless current_user.admin? || current_user.super_admin? || current_user.super_root?
 end
-  # POST /api/v1/companies
-  def create
-    @company = Company.new(company_params)
-    if @company.save
-      render json: @company, status: :created
-    else
-      render json: { errors: @company.errors.full_messages }, status: :unprocessable_entity
-    end
+
+def index
+  @company = Company.find_by(id: current_user.company_id)
+  if @company
+    render json: @company, status: :ok
+  else
+    render json: { error: "Company not found" }, status: :not_found
   end
+end
+# POST /api/v1/companies
+def create
+  @company = Company.new(company_params)
+  if @company.save
+    render json: @company, status: :created
+  else
+    render json: { errors: @company.errors.full_messages }, status: :unprocessable_entity
+  end
+end
 
   private
 

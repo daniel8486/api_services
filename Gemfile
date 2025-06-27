@@ -70,10 +70,19 @@ gem "sidekiq"
 gem "redis"
 
 # Use Dot.env to load environment variables from .env files [
-gem "dotenv-rails"
+gem "dotenv-rails", groups: [ :development, :test ]
 
 # Use Mail for sending emails []
 gem "mail"
+
+# Utils Day
+gem "business_time"
+
+gem "prawn"
+gem "prawn-table"
+
+# Region and Geolocation
+gem "geocoder"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

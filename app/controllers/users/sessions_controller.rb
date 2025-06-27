@@ -5,16 +5,23 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
   # before_action :configure_sign_in_params, only: [:create]
   private
-  def respond_with(current_user, _opts = {})
-    @token = request.env["warden-jwt_auth.token"]
-    headers["Authorization"] = @token
+  def respond_with(resource, _opts = {})
+   if resource.persisted?
+      @token = request.env["warden-jwt_auth.token"]
+      headers["Authorization"] = @token
 
-    render json: {
+      render json: {
       status: {
         code: 200, message: "Logged in successfully.",
-        data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes] }
+        data: { user: UserSerializer.new(resource).serializable_hash[:data][:attributes] }
       }
     }, status: :ok
+   else
+    render json: {
+      status: 401,
+      message: "Invalid email or password."
+    }, status: :unauthorized
+   end
   end
   def respond_to_on_destroy
     if request.headers["Authorization"].present?
@@ -31,6 +38,21 @@ class Users::SessionsController < Devise::SessionsController
       render json: {
         status: 401,
         message: "Couldn't find an active session."
+      }, status: :unauthorized
+    end
+  end
+
+  def is_valid_token
+    if current_user
+      render json: {
+        status: 200,
+        message: "Token válido",
+        user: UserSerializer.new(current_user).serializable_hash[:data][:attributes]
+      }, status: :ok
+    else
+      render json: {
+        status: 401,
+        message: "Token inválido ou expirado."
       }, status: :unauthorized
     end
   end

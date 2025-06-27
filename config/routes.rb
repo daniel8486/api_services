@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post "refresh_token", to: "sessions#refresh_token"
+      get "is_valid_token", to: "users#is_valid_token"
 
       resources :users
 
@@ -28,11 +29,30 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :companies, only: [ :create ]
+      resources :companies do
+        resources :plans
+        resources :campaigns
+      end
+
+      resources :contracts
 
       resources :clients
 
-      get "is_valid_token", to: "sessions#is_valid_token"
+      post "cash_registers/open", to: "cash_registers#open"
+      post "cash_registers/close", to: "cash_registers#close"
+      post "installments/:installment_id/receber_pagamento", to: "installments#receber_pagamento"
+
+      post "import_clients", to: "csv_xls_uploads#import_clients"
+      post "confirm_import", to: "csv_xls_uploads#confirm_import"
+
+      resources :pending_import_tables, only: [] do
+       member do
+         post :approve
+         post :reject
+       end
+      end
+
+      # get "is_valid_token", to: "sessions#is_valid_token"
       match "*unmatched", to: "errors#not_found", via: :all
     end
   end

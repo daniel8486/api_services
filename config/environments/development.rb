@@ -18,6 +18,19 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
+  # Config SMTP for sending emails.
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV["SMTP_ADDRESS"],
+    port: ENV["SMTP_PORT"],
+    user_name: ENV["SMTP_USERNAME"],
+    password: ENV["SMTP_PASSWORD"],
+    authentication: :plain,
+    enable_starttls_auto: true,
+    domain: ENV["SMTP_DOMAIN"]
+  }
+
+
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?
