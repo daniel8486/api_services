@@ -4,17 +4,17 @@ lock "~> 3.19.2"
 set :application, "api_services"
 set :repo_url, "git@github.com:daniel8486/api_services.git"
 
-set :deploy_to, "/var/www/api_services/back_end/"
+set :deploy_to, "/var/www/api_services/back_end"
 set :branch, "main"
 set :keep_releases, 5
 set :format, :airbrussh
 set :log_level, :debug
 
 # CREDENTIALS: Arquivos que devem existir no servidor
-append :linked_files, "config/database.yml"
+append :linked_files, "config/database.yml", "config/master.key"
 
 # PRODUCTION CREDENTIALS (Adicionar)
-append :linked_files, "config/credentials/production.yml.enc"
+# append :linked_files, "config/credentials/production.yml.enc"
 
 # Diretórios compartilhados
 append :linked_dirs, "storage", "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
