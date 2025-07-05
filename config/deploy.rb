@@ -29,8 +29,8 @@ set :rvm_ruby, "3.3.8"
 # Environment variables
 set :default_env, {
   "RAILS_ENV" => "production",
-  "LANG" => "pt_PT.utf8",
-  "LC_ALL" => "pt_PT.utf8"
+  "LANG" => "en_US.UTF-8",
+  "LC_ALL" => "en_US.UTF-8"
 }
 
 # Assets precompile
