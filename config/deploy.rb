@@ -51,8 +51,10 @@ set :default_env, {
 after "deploy:finished", "deploy:restart"
 
 namespace :deploy do
- task :restart do
-  invoke "unicorn:stop"
-  invoke "unicorn:start"
+ description "Restart application"
+  task :restart do
+   on roles(:app) do
+     execute :sudo, :systemctl, :restart, "api_services"
+   end
  end
 end
