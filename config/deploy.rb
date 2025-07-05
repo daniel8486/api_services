@@ -48,13 +48,24 @@ set :default_env, {
 #  auth_methods: %w[publickey]
 # }
 
-after "deploy:finished", "deploy:restart"
+set :unicorn_config_path, -> { "#{shared_path}/config/unicorn.rb" }
 
 namespace :deploy do
- desc "Restart application"
+  desc "Start unicorn"
+  task :start_unicorn do
+    on roles(:app) do
+      within current_path do
+        execute '/usr/local/rvm/bin/rvm default do bundle exec unicorn -c #{fetch(:unicorn_config_path)} -E production -D'
+      end
+    end
+  end
+
+  desc "Restart application"
   task :restart do
-   on roles(:app) do
-     execute :sudo, :systemctl, :restart, "api_services"
-   end
- end
+    on roles(:app) do
+      execute :sudo, :systemctl, :restart, "api_services"
+    end
+  end
 end
+
+after "deploy:finished", "deploy:restart"
