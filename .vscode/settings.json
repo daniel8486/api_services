@@ -1,0 +1,8 @@
+{
+  "editor.quickSuggestions": "off",
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.suggest.showWords": false,
+  "editor.suggest.showKeywords": false,
+  "editor.suggest.showSnippets": false,
+  "editor.wordBasedSuggestions": "off"
+}

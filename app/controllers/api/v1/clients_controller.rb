@@ -27,6 +27,34 @@ class Api::V1::ClientsController < ApplicationController
     render_success result, status: :ok
   end
 
+  def show
+  @client = Client.includes(:dependents, :affiliations, :addresses, :documents, :company)
+                  .find_by(id: params[:id], company_id: current_user.company_id)
+
+  Rails.logger.info "Client found: #{@client.inspect}" if @client
+
+  if @client
+    result = ClientSerializer.new(
+      @client,
+      include: [
+        :dependents,
+        :affiliations,
+        :addresses,
+        :documents,
+        :company,
+        "documents.type_document"
+      ]
+    ).serializable_hash
+
+    Rails.logger.info "@Client SERIALIZED: #{result}"
+
+    render_success result, status: :ok
+
+  else
+    render_error("Client not found", :not_found)
+  end
+end
+
   def create
     @client = ClientService.build_with_address(client_params)
     if @client.save
