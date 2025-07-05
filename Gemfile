@@ -112,6 +112,7 @@ group :development do
   gem "capistrano-rvm"
   gem "capistrano-bundler", "~> 1.5"
   gem "capistrano-rails", "~> 1.4"
+  gem "capistrano3-unicorn"
 end
 
 group :test do
@@ -121,5 +122,7 @@ group :test do
 end
 
 group :production do
-  gem "mysql2"
+  # gem "mysql2"
+  # gem "pg"
+  gem "unicorn"
 end

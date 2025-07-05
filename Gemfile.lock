@@ -107,6 +107,8 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano3-unicorn (0.2.1)
+      capistrano (~> 3.1, >= 3.1.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -228,6 +230,7 @@ GEM
       sshkit (>= 1.23.0, < 2.0)
       thor (~> 1.3)
       zeitwerk (>= 2.6.18, < 3.0)
+    kgio (2.11.4)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
@@ -251,7 +254,6 @@ GEM
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
-    mysql2 (0.5.6)
     net-http (0.6.0)
       uri
     net-imap (0.5.8)
@@ -363,6 +365,7 @@ GEM
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
+    raindrops (0.20.1)
     rake (13.2.1)
     rdoc (6.14.0)
       erb
@@ -505,6 +508,9 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    unicorn (6.1.0)
+      kgio (~> 2.6)
+      raindrops (~> 0.7)
     uri (1.0.3)
     useragent (0.16.11)
     warden (1.2.9)
@@ -549,6 +555,7 @@ DEPENDENCIES
   capistrano-bundler (~> 1.5)
   capistrano-rails (~> 1.4)
   capistrano-rvm
+  capistrano3-unicorn
   capybara
   carrierwave
   carrierwave-base64
@@ -564,7 +571,6 @@ DEPENDENCIES
   jsonapi-serializer
   kamal
   mail
-  mysql2
   nokogiri
   pg (~> 1.1)
   prawn
@@ -587,6 +593,7 @@ DEPENDENCIES
   solid_queue
   thruster
   tzinfo-data
+  unicorn
   web-console
 
 BUNDLED WITH

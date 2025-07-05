@@ -47,3 +47,12 @@ set :default_env, {
 #  keys: %w[~/.ssh/id_rsa],
 #  auth_methods: %w[publickey]
 # }
+
+after "deploy:finished", "deploy:restart"
+
+namespace :deploy do
+ task :restart do
+  invoke "unicorn:stop"
+  invoke "unicorn:start"
+ end
+end
