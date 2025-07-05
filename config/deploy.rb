@@ -11,7 +11,7 @@ set :format, :airbrussh
 set :log_level, :debug
 
 # CREDENTIALS: Arquivos que devem existir no servidor
-append :linked_files, "config/database.yml", "config/master.key"
+append :linked_files, "config/database.yml"
 
 # PRODUCTION CREDENTIALS (Adicionar)
 append :linked_files, "config/credentials/production.yml.enc"
