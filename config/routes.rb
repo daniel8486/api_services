@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "welcomes/index"
   require "sidekiq/web"
   mount Sidekiq::Web => "/sidekiq"
 
@@ -67,4 +68,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   #
   match "*unmatched", to: "errors#not_found", via: :all
+
+  root "welcomes#index"
 end
