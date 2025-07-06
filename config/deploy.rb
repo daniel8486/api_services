@@ -48,7 +48,7 @@ set :default_env, {
 #  auth_methods: %w[publickey]
 # }
 
-set :unicorn_config_path, -> { "/var/www/api_services/back_end/current/log/unicorn.rb" }
+set :unicorn_config_path, -> { "#{current_path}/config/unicorn/production.rb" }
 
 namespace :deploy do
   desc "Start unicorn"
