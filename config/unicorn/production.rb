@@ -2,10 +2,10 @@ root = "/var/www/api_services/back_end/current"
 working_directory root
 
 # CORRIGIR: PID deve estar em shared para persistir entre deploys
-pid "#{root}/shared/tmp/pids/unicorn.pid"
+pid "#{root}/tmp/pids/unicorn.pid"
 
-stderr_path "#{root}/shared/log/unicorn.stderr.log"
-stdout_path "#{root}/shared/log/unicorn.stdout.log"
+stderr_path "#{root}/log/unicorn.stderr.log"
+stdout_path "#{root}/log/unicorn.stdout.log"
 
 worker_processes 4
 timeout 30
