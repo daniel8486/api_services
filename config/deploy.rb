@@ -60,12 +60,11 @@ namespace :deploy do
     end
   end
 
-  desc "Restart application"
-  task :restart do
-    on roles(:app) do
-      execute :sudo, :systemctl, :restart, "api_services"
-    end
-  end
+   desc "Restart application"
+   task :restart do
+    invoke "unicorn:stop"
+    invoke "unicorn:start"
+   end
 end
 
 after "deploy:finished", "deploy:restart"
