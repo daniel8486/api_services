@@ -13,9 +13,6 @@ set :log_level, :debug
 # CREDENTIALS: Arquivos que devem existir no servidor
 append :linked_files, "config/database.yml", "config/master.key"
 
-# ADICIONAR: Configuração do Unicorn
-append :linked_files, "config/unicorn.rb"
-
 # Diretórios compartilhados
 append :linked_dirs, "storage", "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
 
@@ -32,13 +29,15 @@ set :default_env, {
   "LC_ALL" => "en_US.UTF-8"
 }
 
+# PULAR ASSETS (API-only)
+set :assets_roles, []
+
 # Configuração do Unicorn
 set :unicorn_config_path, -> { "#{shared_path}/config/unicorn.rb" }
 set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 
 # Hooks de deploy
 after "deploy:updated", "deploy:migrate"
-after "deploy:migrate", "deploy:compile_assets"
 after "deploy:published", "deploy:restart"
 
 namespace :deploy do
@@ -53,22 +52,10 @@ namespace :deploy do
     end
   end
 
-  desc "Compile assets"
-  task :compile_assets do
-    on roles(:app) do
-      within current_path do
-        with rails_env: :production do
-          execute "/usr/local/rvm/bin/rvm default do bundle exec rails assets:precompile"
-        end
-      end
-    end
-  end
-
   desc "Start unicorn"
   task :start_unicorn do
     on roles(:app) do
       within current_path do
-        # CORRIGIDO: usar aspas simples para evitar interpolação prematura
         execute "/usr/local/rvm/bin/rvm default do bundle exec unicorn",
                 "-c", fetch(:unicorn_config_path),
                 "-E", "production",
@@ -80,14 +67,14 @@ namespace :deploy do
   desc "Stop unicorn"
   task :stop_unicorn do
     on roles(:app) do
-      execute 'kill -QUIT `cat #{fetch(:unicorn_pid)}`', raise_on_non_zero_exit: false
+      execute "kill -QUIT `cat #{fetch(:unicorn_pid)}`", raise_on_non_zero_exit: false
     end
   end
 
   desc "Restart unicorn"
   task :restart_unicorn do
     on roles(:app) do
-      execute 'kill -USR2 `cat #{fetch(:unicorn_pid)}`', raise_on_non_zero_exit: false
+      execute "kill -USR2 `cat #{fetch(:unicorn_pid)}`", raise_on_non_zero_exit: false
       # Fallback para systemctl se processo não existir
       execute :sudo, :systemctl, :restart, "api_services"
     end
@@ -99,5 +86,62 @@ namespace :deploy do
       execute :sudo, :systemctl, :restart, "api_services"
       sleep 5
     end
+  end
+
+  desc "Create database"
+  task :create_db do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          execute "/usr/local/rvm/bin/rvm default do bundle exec rails db:create"
+        end
+      end
+    end
+  end
+
+  desc "Setup unicorn config"
+  task :setup_unicorn do
+    on roles(:app) do
+      execute :mkdir, "-p", "#{shared_path}/config"
+      execute :mkdir, "-p", "#{shared_path}/tmp/sockets"
+      execute :mkdir, "-p", "#{shared_path}/tmp/pids"
+      execute :mkdir, "-p", "#{shared_path}/log"
+
+      unicorn_config = <<-EOF
+worker_processes 2
+timeout 30
+working_directory "#{current_path}"
+listen "#{shared_path}/tmp/sockets/unicorn.sock", :backlog => 64
+pid "#{shared_path}/tmp/pids/unicorn.pid"
+stderr_path "#{shared_path}/log/unicorn.stderr.log"
+stdout_path "#{shared_path}/log/unicorn.stdout.log"
+preload_app true
+
+before_fork do |server, worker|
+  if defined?(ActiveRecord::Base)
+    ActiveRecord::Base.connection.disconnect!
+  end
+end
+
+after_fork do |server, worker|
+  if defined?(ActiveRecord::Base)
+    ActiveRecord::Base.establish_connection
+  end
+end
+EOF
+
+      upload! StringIO.new(unicorn_config), "#{shared_path}/config/unicorn.rb"
+    end
+  end
+end
+
+# Tarefas extras para primeiro deploy
+namespace :setup do
+  desc "Setup initial deploy"
+  task :first_deploy do
+    invoke "deploy:setup_unicorn"
+    invoke "deploy"
+    invoke "deploy:create_db"
+    invoke "deploy:migrate"
   end
 end
