@@ -2,7 +2,7 @@ class WelcomesController < ApplicationController
   def index
     render json: {
       message: "Welcome to the API Services backend! 🚀",
-      documentation: "https://api-services-docs.example.com",
+      documentation: "",
       version: Rails.application.config.x.api_version,
       environment: Rails.env,
 
