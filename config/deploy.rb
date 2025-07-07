@@ -71,10 +71,22 @@ set :default_env, {
 after "deploy:finished", "deploy:restart"
 
 namespace :deploy do
-  desc "Restart Application"
-  task :restart do
+  desc "Verify that the application is running"
+  task :verify do
     on roles(:app) do
-      execute :sudo, :systemctl, :restart, "api_services"
+      execute :sudo, :systemctl, :status, "api_services"
+    end
+  end
+  desc "Stop Application"
+  task :stop do
+    on roles(:app) do
+      execute :sudo, :systemctl, :stop, "api_services"
+    end
+  end
+  desc "Restart Application"
+  task :start do
+    on roles(:app) do
+      execute :sudo, :systemctl, :start, "api_services"
     end
   end
 end
