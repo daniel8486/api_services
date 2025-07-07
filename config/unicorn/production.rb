@@ -11,7 +11,6 @@ worker_processes 4
 timeout 30
 preload_app true
 
-daemonize true
 
 # Socket em tmp
 listen "/tmp/api_services.sock", backlog: 64
