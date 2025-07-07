@@ -89,4 +89,10 @@ namespace :deploy do
       execute :sudo, :systemctl, :start, "api_services"
     end
   end
+  desc "Restart Application"
+  task :restart do
+    on roles(:app) do
+      execute :sudo, :systemctl, :restart, "api_services"
+    end
+  end
 end
