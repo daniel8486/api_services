@@ -61,11 +61,11 @@
 #   }
 
 
-# role :app, %w[ root@172.41.16.50 ]
-# role :web, %w[ root@172.41.16.50 ]
-# role :db, %w[ root@172.41.16.50 ]
+role :app, %w[ root@172.41.16.50 ]
+role :web, %w[ root@172.41.16.50 ]
+role :db, %w[ root@172.41.16.50 ]
 
 
-role :app, %w[ root@82.153.205.236 ]
-role :web, %w[ root@82.153.205.236 ]
-role :db, %w[ root@82.153.205.236 ]
+# role :app, %w[ root@82.153.205.236 ]
+# role :web, %w[ root@82.153.205.236 ]
+# role :db, %w[ root@82.153.205.236 ]
