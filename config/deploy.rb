@@ -171,4 +171,16 @@ desc "Show database statistics"
       end
     end
   end
+
+  desc "Check migrations status"
+   task :check_migrations do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          result = capture(:bundle, :exec, :rake, "db:migrate:status")
+          info "📊 Migrations status:\n#{result}"
+        end
+      end
+    end
+  end
 end

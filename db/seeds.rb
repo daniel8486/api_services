@@ -123,25 +123,40 @@ require 'csv'
 puts "🌱 Starting seed process..."
 
 begin
+  # Verificar se estamos em produção
+  puts "Environment: #{Rails.env}"
+
   # 1. Criar usuário super admin
-  if User.exists?
-    puts "✅ Users already exist (#{User.count} users found)"
-  else
-    puts "👤 Creating default super admin user..."
-    User.create!(
-      email: "superroot@superadmin.com",
+  puts "👤 Checking for existing users..."
+  user_count = User.count
+  puts "Found #{user_count} users"
+
+  if user_count == 0
+    puts "Creating super admin user..."
+
+    user = User.new(
+      email: "daniel@sysdjamsofthouse.com.br",
       password: "@5893475873fohsdklfhskdr789hfskldhflksh@@",
       cpf: "00708721397",
-      role: 4, # super_root
+      role: 4 # super_root
     )
-    puts "✅ Super admin user created successfully!"
+
+    if user.save
+      puts "✅ Super admin user created successfully!"
+    else
+      puts "❌ Failed to create user: #{user.errors.full_messages.join(', ')}"
+    end
+  else
+    puts "✅ Users already exist (#{user_count} users found)"
   end
 
   # 2. Criar graus de parentesco
-  if DegreeDependent.exists?
-    puts "✅ Degree dependents already exist (#{DegreeDependent.count} found)"
-  else
-    puts "👨‍👩‍👧‍👦 Creating degree dependents..."
+  puts "👨‍👩‍👧‍👦 Checking degree dependents..."
+  degree_count = DegreeDependent.count
+  puts "Found #{degree_count} degree dependents"
+
+  if degree_count == 0
+    puts "Creating degree dependents..."
     degree_dependents = [
       { description: 'Filho' },
       { description: 'Pai' },
@@ -151,16 +166,24 @@ begin
     ]
 
     degree_dependents.each do |dependent|
-      DegreeDependent.find_or_create_by!(dependent)
+      dd = DegreeDependent.new(dependent)
+      if dd.save
+        puts "✅ Created: #{dd.description}"
+      else
+        puts "❌ Failed to create degree dependent: #{dd.errors.full_messages.join(', ')}"
+      end
     end
-    puts "✅ #{degree_dependents.count} degree dependents created!"
+  else
+    puts "✅ Degree dependents already exist (#{degree_count} found)"
   end
 
   # 3. Criar tipos de documentos
-  if TypeDocument.exists?
-    puts "✅ Type documents already exist (#{TypeDocument.count} found)"
-  else
-    puts "📄 Creating document types..."
+  puts "📄 Checking document types..."
+  doc_count = TypeDocument.count
+  puts "Found #{doc_count} document types"
+
+  if doc_count == 0
+    puts "Creating document types..."
     type_documents = [
       { name: 'CPF' },
       { name: 'RG - FRENTE' },
@@ -173,12 +196,18 @@ begin
     ]
 
     type_documents.each do |document|
-      TypeDocument.find_or_create_by!(document)
+      td = TypeDocument.new(document)
+      if td.save
+        puts "✅ Created: #{td.name}"
+      else
+        puts "❌ Failed to create document type: #{td.errors.full_messages.join(', ')}"
+      end
     end
-    puts "✅ #{type_documents.count} document types created!"
+  else
+    puts "✅ Document types already exist (#{doc_count} found)"
   end
 
-  puts "🎉 Seed process completed successfully!"
+  puts "🎉 Seed process completed!"
   puts "📊 Final counts:"
   puts "   Users: #{User.count}"
   puts "   DegreeDependent: #{DegreeDependent.count}"
@@ -186,6 +215,7 @@ begin
 
 rescue => e
   puts "❌ Error during seed process: #{e.message}"
-  puts "🔍 Full error: #{e.backtrace.first(5).join('\n')}"
+  puts "🔍 Backtrace:"
+  puts e.backtrace.first(10).join("\n")
   raise e
 end
