@@ -77,18 +77,21 @@ namespace :deploy do
       execute :sudo, :systemctl, :status, "api_services"
     end
   end
+
   desc "Stop Application"
   task :stop do
     on roles(:app) do
       execute :sudo, :systemctl, :stop, "api_services"
     end
   end
+
   desc "Restart Application"
   task :start do
     on roles(:app) do
       execute :sudo, :systemctl, :start, "api_services"
     end
   end
+
   desc "Restart Application"
   task :restart do
     on roles(:app) do
@@ -114,74 +117,58 @@ task :force_seed do
 end
 
 desc "Show database statistics"
-task :db_stats do
-  on roles(:app) do
-    within current_path do
-      with rails_env: :production do
-        result = capture(:bundle, :exec, :rails, :runner, "
-          puts \"Users: #{User.count}\"
-          puts \"DegreeDependent: #{DegreeDependent.count}\"
-          puts \"TypeDocument: #{TypeDocument.count}\"
-        ")
-        info "📊 Database Statistics:\n#{result}"
-      end
-    end
-  end
-end
+  task :db_stats do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          users = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+          degree_dependents = capture(:bundle, :exec, :rails, :runner, "puts DegreeDependent.count")
+          type_documents = capture(:bundle, :exec, :rails, :runner, "puts TypeDocument.count")
 
-desc "Seed database only if empty"
-task :seed_if_empty do
-  on roles(:app) do
-    within current_path do
-      with rails_env: :production do
-        begin
-          # Verificar se tabela User existe
-          table_exists = capture(:bundle, :exec, :rails, :runner, "puts ActiveRecord::Base.connection.table_exists?('users')")
-
-          if table_exists.strip == "false"
-            info "❌ Users table doesn't exist. Run migrations first!"
-            execute :bundle, :exec, :rake, "db:migrate"
-          end
-
-          # Verificar quantidade de usuários
-          result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
-          user_count = result.strip.to_i
-
-          info "📊 Database status: #{user_count} users found"
-
-          if user_count == 0
-            info "🌱 Database is empty, running seed..."
-
-            # Limpar cache antes de executar seed
-            execute :bundle, :exec, :rake, "cache:clear"
-
-            # Executar seed
-            execute :bundle, :exec, :rake, "db:seed"
-
-            # Verificar se seed funcionou
-            new_count = capture(:bundle, :exec, :rails, :runner, "puts User.count")
-            info "✅ Seed completed! Users created: #{new_count.strip}"
-          else
-            info "⏭️  Database already has #{user_count} users, skipping seed"
-          end
-
-        rescue => e
-          error "❌ Error during seed check: #{e.message}"
+          info "📊 Database Statistics:"
+          info "   Users: #{users.strip}"
+          info "   DegreeDependent: #{degree_dependents.strip}"
+          info "   TypeDocument: #{type_documents.strip}"
         end
       end
     end
   end
-end
 
-desc "Clear Rails cache"
-task :clear_cache do
-  on roles(:app) do
-    within current_path do
-      with rails_env: :production do
-        execute :bundle, :exec, :rake, "cache:clear"
-        info "🧹 Rails cache cleared!"
+ desc "Seed database only if empty"
+  task :seed_if_empty do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          # Verificar quantidade de usuários
+          result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+          user_count = result.strip.to_i
+
+          info "📊 Found #{user_count} users in database"
+
+          if user_count == 0
+            info "🌱 Database is empty, running seed..."
+            execute :bundle, :exec, :rake, "db:seed"
+
+            # Verificar resultado
+            new_result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+            info "✅ Seed completed! Users created: #{new_result.strip}"
+          else
+            info "⏭️  Database has #{user_count} users, skipping seed"
+          end
+        end
       end
     end
   end
-end
+
+ desc "Clear Rails cache"
+  task :clear_cache do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          execute :bundle, :exec, :rake, "cache:clear"
+          info "🧹 Rails cache cleared!"
+        end
+      end
+    end
+  end
 end
