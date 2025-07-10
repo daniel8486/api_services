@@ -119,10 +119,14 @@ namespace :deploy do
     on roles(:app) do
       within current_path do
         with rails_env: :production do
-          info "👤 Cadastrando usuários..."
-          execute :bundle, :exec, :rake, "db:seed:users"
           users = capture(:bundle, :exec, :rails, :runner, "puts User.count")
-          info "✅ Usuários cadastrados! Total: #{users.strip}"
+          degree_dependents = capture(:bundle, :exec, :rails, :runner, "puts DegreeDependent.count")
+          type_documents = capture(:bundle, :exec, :rails, :runner, "puts TypeDocument.count")
+
+          info "📊 Database Statistics:"
+          info "   Users: #{users.strip}"
+          info "   DegreeDependent: #{degree_dependents.strip}"
+          info "   TypeDocument: #{type_documents.strip}"
         end
       end
     end
