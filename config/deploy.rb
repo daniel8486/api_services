@@ -95,20 +95,93 @@ namespace :deploy do
       execute :sudo, :systemctl, :restart, "api_services"
     end
   end
-  # TASK PARA SEED APENAS SE DB ESTIVER VAZIO
-  desc "Seed database only if empty"
-  task :seed_if_empty do
-    on roles(:app) do
-      within current_path do
-          # Verificar se tem dados (ajuste conforme seu modelo)
-          result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
-          if result.strip == "0"
-            execute :bundle, :exec, :rake, "db:seed"
-            info "Database seeded successfully!"
-          else
-            info "Database already has data, skipping seed"
-          end
+
+# ADICIONAR ESTAS TASKS ÚTEIS:
+desc "Force database seed (ignore existing data)"
+task :force_seed do
+  on roles(:app) do
+    within current_path do
+      with rails_env: :production do
+        info "🚀 Force seeding database..."
+        execute :bundle, :exec, :rake, "db:seed"
+
+        # Verificar resultado
+        result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+        info "✅ Seed completed! Total users: #{result.strip}"
       end
     end
   end
+end
+
+desc "Show database statistics"
+task :db_stats do
+  on roles(:app) do
+    within current_path do
+      with rails_env: :production do
+        result = capture(:bundle, :exec, :rails, :runner, "
+          puts \"Users: #{User.count}\"
+          puts \"DegreeDependent: #{DegreeDependent.count}\"
+          puts \"TypeDocument: #{TypeDocument.count}\"
+        ")
+        info "📊 Database Statistics:\n#{result}"
+      end
+    end
+  end
+end
+
+desc "Seed database only if empty"
+task :seed_if_empty do
+  on roles(:app) do
+    within current_path do
+      with rails_env: :production do
+        begin
+          # Verificar se tabela User existe
+          table_exists = capture(:bundle, :exec, :rails, :runner, "puts ActiveRecord::Base.connection.table_exists?('users')")
+
+          if table_exists.strip == "false"
+            info "❌ Users table doesn't exist. Run migrations first!"
+            execute :bundle, :exec, :rake, "db:migrate"
+          end
+
+          # Verificar quantidade de usuários
+          result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+          user_count = result.strip.to_i
+
+          info "📊 Database status: #{user_count} users found"
+
+          if user_count == 0
+            info "🌱 Database is empty, running seed..."
+
+            # Limpar cache antes de executar seed
+            execute :bundle, :exec, :rake, "cache:clear"
+
+            # Executar seed
+            execute :bundle, :exec, :rake, "db:seed"
+
+            # Verificar se seed funcionou
+            new_count = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+            info "✅ Seed completed! Users created: #{new_count.strip}"
+          else
+            info "⏭️  Database already has #{user_count} users, skipping seed"
+          end
+
+        rescue => e
+          error "❌ Error during seed check: #{e.message}"
+        end
+      end
+    end
+  end
+end
+
+desc "Clear Rails cache"
+task :clear_cache do
+  on roles(:app) do
+    within current_path do
+      with rails_env: :production do
+        execute :bundle, :exec, :rake, "cache:clear"
+        info "🧹 Rails cache cleared!"
+      end
+    end
+  end
+end
 end
