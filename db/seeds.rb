@@ -135,11 +135,20 @@ begin
     puts "Creating super admin user..."
 
     user = User.new(
-      email: "daniel@sysdjamsofthouse.com.br",
-      password: "@5893475873fohsdklfhskdr789hfskldhflksh@@",
-      cpf: "00708721397",
-      role: 4 # super_root
+       # {
+       # email: "daniel@sysdjamsofthouse.com.br",
+       # password: "@AthusOtto@2025@@",
+       # cpf: "00708721397",
+       # role: 4 # super_root
+       # },
+
+       email: "contato@sysdjamsofthouse.com.br",
+       password: "@AthusOtto@2025@@",
+       cpf: "00708721399",
+       role: 4 # super_root
     )
+
+
 
     if user.save
       puts "✅ Super admin user created successfully!"
