@@ -41,72 +41,72 @@ require 'csv'
  #   end
  #  end
  # 4º Cria os bairros
- CSV.foreach('db/pi.cepaberto_parte_5.csv', headers: true) do |row|
-   city = City.find_by(code: 22) # Teresina
-   next unless city
+ # CSV.foreach('db/pi.cepaberto_parte_5.csv', headers: true) do |row|
+ #   city = City.find_by(code: 22) # Teresina
+ #   next unless city
+ #
+ #   neighborhood = Neighborhood.find_or_create_by!(
+ #     name: row['Localidade'].to_s.strip,
+ #     city: city,
+ #     locality: row['Logradouro'].to_s.strip,
+ #   )
+ #
+ #   Zip.create!(
+ #     code: row['CEP'],
+ #     street: row['Logradouro'],
+ #     neighborhood: neighborhood,
+ #     city: city,
+ #     zone: row['Bairro'],
+ #   )
+ # end
 
-   neighborhood = Neighborhood.find_or_create_by!(
-     name: row['Localidade'].to_s.strip,
-     city: city,
-     locality: row['Logradouro'].to_s.strip,
-   )
-
-   Zip.create!(
-     code: row['CEP'],
-     street: row['Logradouro'],
-     neighborhood: neighborhood,
-     city: city,
-     zone: row['Bairro'],
+ if User.exists?
+   puts "Usuários já existem, pulando criação de usuários."
+ else
+   puts "Criando usuários padrão..."
+   User.create!(
+     email: "superroot@superadmin.com",
+     password: "@5893475873fohsdklfhskdr789hfskldhflksh@@",
+     cpf: "12345678901",
+     role: 4, # super_root
    )
  end
 
-# if User.exists?
-#   puts "Usuários já existem, pulando criação de usuários."
-# else
-#   puts "Criando usuários padrão..."
-#   User.create!(
-#     email: "superroot@superadmin.com",
-#     password: "123456789123131",
-#     cpf: "12345678901",
-#     role: 4, # super_root
-#   )
-# end
-#
-# if DegreeDependent.exists?
-#   puts "Graus de parentesco já existem, pulando criação de graus."
-#   degree_dependents = []
-# else
-#   puts "Criando graus de parentesco padrão..."
-#   degree_dependents = [
-#     { description: 'Filho' },
-#     { description: 'Pai' },
-#     { description: 'Mãe' },
-#     { description: 'Sobrinho' },
-#     { description: 'Outros - Não Especificados' }
-#   ]
-# end
-#
-# degree_dependents.each do |dependent|
-#   DegreeDependent.find_or_create_by!(dependent)
-# end
-#
-# if TypeDocument.exists?
-#   puts "Tipos de documentos já existem, pulando criação de tipos."
-#   type_documents = []
-# else
-#   puts "Criando Tipos de Documentos Padrões..."
-#   type_documents = [
-#     { name: 'CPF' },
-#     { name: 'RG - FRENTE' },
-#     { name: 'RG - VERSO' },
-#     { name: 'CNH' },
-#     { name: 'Passaporte' },
-#     { name: 'Comprovante de Endereço' },
-#     { name: 'Outros - Não Especificados' },
-#     { name: 'Todos acima em PDF' }
-#   ]
-# end
-#
-# type_documents.each do |document|
-#   TypeDocument.find_or_create_by!(document)
-# end
+ if DegreeDependent.exists?
+   puts "Graus de parentesco já existem, pulando criação de graus."
+   degree_dependents = []
+ else
+   puts "Criando graus de parentesco padrão..."
+   degree_dependents = [
+     { description: 'Filho' },
+     { description: 'Pai' },
+     { description: 'Mãe' },
+     { description: 'Sobrinho' },
+     { description: 'Outros - Não Especificados' }
+   ]
+ end
+
+ degree_dependents.each do |dependent|
+   DegreeDependent.find_or_create_by!(dependent)
+ end
+
+ if TypeDocument.exists?
+   puts "Tipos de documentos já existem, pulando criação de tipos."
+   type_documents = []
+ else
+   puts "Criando Tipos de Documentos Padrões..."
+   type_documents = [
+     { name: 'CPF' },
+     { name: 'RG - FRENTE' },
+     { name: 'RG - VERSO' },
+     { name: 'CNH' },
+     { name: 'Passaporte' },
+     { name: 'Comprovante de Endereço' },
+     { name: 'Outros - Não Especificados' },
+     { name: 'Todos acima em PDF' }
+   ]
+ end
+
+ type_documents.each do |document|
+   TypeDocument.find_or_create_by!(document)
+ end

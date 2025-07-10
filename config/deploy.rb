@@ -95,4 +95,20 @@ namespace :deploy do
       execute :sudo, :systemctl, :restart, "api_services"
     end
   end
+  # TASK PARA SEED APENAS SE DB ESTIVER VAZIO
+  desc "Seed database only if empty"
+  task :seed_if_empty do
+    on roles(:app) do
+      within current_path do
+          # Verificar se tem dados (ajuste conforme seu modelo)
+          result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+          if result.strip == "0"
+            execute :bundle, :exec, :rake, "db:seed"
+            info "Database seeded successfully!"
+          else
+            info "Database already has data, skipping seed"
+          end
+      end
+    end
+  end
 end
