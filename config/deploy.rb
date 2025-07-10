@@ -85,7 +85,7 @@ namespace :deploy do
     end
   end
 
-  desc "Restart Application"
+  desc "Start Application"
   task :start do
     on roles(:app) do
       execute :sudo, :systemctl, :start, "api_services"
@@ -99,22 +99,26 @@ namespace :deploy do
     end
   end
 
-# ADICIONAR ESTAS TASKS ÚTEIS:
-desc "Force database seed (ignore existing data)"
-task :force_seed do
-  on roles(:app) do
-        info "🚀 Force seeding database..."
-        execute :bundle, :exec, :rake, "db:seed"
-
-        # Verificar resultado
-        result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
-        info "✅ Seed completed! Total users: #{result.strip}"
+  desc "Force database seed (ignore existing data)"
+  task :force_seed do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          info "🚀 Force seeding database..."
+          execute :bundle, :exec, :rake, "db:seed"
+          # Verificar resultado
+          result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+          info "✅ Seed completed! Total users: #{result.strip}"
+        end
+      end
+    end
   end
-end
 
-desc "Show database statistics"
+  desc "Show database statistics"
   task :db_stats do
     on roles(:app) do
+      within current_path do
+        with rails_env: :production do
           users = capture(:bundle, :exec, :rails, :runner, "puts User.count")
           degree_dependents = capture(:bundle, :exec, :rails, :runner, "puts DegreeDependent.count")
           type_documents = capture(:bundle, :exec, :rails, :runner, "puts TypeDocument.count")
@@ -123,12 +127,16 @@ desc "Show database statistics"
           info "   Users: #{users.strip}"
           info "   DegreeDependent: #{degree_dependents.strip}"
           info "   TypeDocument: #{type_documents.strip}"
+        end
+      end
     end
   end
 
- desc "Seed database only if empty"
+  desc "Seed database only if empty"
   task :seed_if_empty do
     on roles(:app) do
+      within current_path do
+        with rails_env: :production do
           # Verificar quantidade de usuários
           result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
           user_count = result.strip.to_i
@@ -145,22 +153,95 @@ desc "Show database statistics"
           else
             info "⏭️  Database has #{user_count} users, skipping seed"
           end
+        end
+      end
     end
   end
 
- desc "Clear Rails cache"
+  desc "Clear Rails cache"
   task :clear_cache do
     on roles(:app) do
+      within current_path do
+        with rails_env: :production do
           execute :bundle, :exec, :rake, "cache:clear"
           info "🧹 Rails cache cleared!"
+        end
+      end
     end
   end
 
   desc "Check migrations status"
-   task :check_migrations do
+  task :check_migrations do
     on roles(:app) do
+      within current_path do
+        with rails_env: :production do
           result = capture(:bundle, :exec, :rake, "db:migrate:status")
           info "📊 Migrations status:\n#{result}"
+        end
+      end
+    end
+  end
+
+  desc "Run database migrations"
+  task :migrate do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          info "🔄 Running database migrations..."
+          execute :bundle, :exec, :rake, "db:migrate"
+          info "✅ Migrations completed!"
+        end
+      end
+    end
+  end
+
+  desc "Setup database (create, migrate, seed)"
+  task :db_setup do
+    on roles(:app) do
+      within current_path do
+        with rails_env: :production do
+          info "🏗️  Setting up database..."
+
+          # Criar database se não existir
+          begin
+            execute :bundle, :exec, :rake, "db:create"
+            info "✅ Database created"
+          rescue
+            info "⚠️  Database already exists or creation failed"
+          end
+
+          # Executar migrations
+          execute :bundle, :exec, :rake, "db:migrate"
+          info "✅ Migrations executed"
+
+          # Executar seed
+          execute :bundle, :exec, :rake, "db:seed"
+          info "✅ Seed executed"
+
+          # Mostrar estatísticas
+          users = capture(:bundle, :exec, :rails, :runner, "puts User.count")
+          degree_dependents = capture(:bundle, :exec, :rails, :runner, "puts DegreeDependent.count")
+          type_documents = capture(:bundle, :exec, :rails, :runner, "puts TypeDocument.count")
+
+          info "📊 Final Database Statistics:"
+          info "   Users: #{users.strip}"
+          info "   DegreeDependent: #{degree_dependents.strip}"
+          info "   TypeDocument: #{type_documents.strip}"
+        end
+      end
+    end
+  end
+
+  desc "Check current directory and files"
+  task :debug_env do
+    on roles(:app) do
+      within current_path do
+        info "📍 Current directory: #{capture(:pwd)}"
+        info "📁 Files in current directory:"
+        info capture(:ls, "-la")
+        info "🔍 Gemfile exists: #{test('[ -f Gemfile ]')}"
+        info "🔍 Rails app?: #{test('[ -f config/application.rb ]')}"
+      end
     end
   end
 end
