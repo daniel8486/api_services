@@ -103,21 +103,18 @@ namespace :deploy do
 desc "Force database seed (ignore existing data)"
 task :force_seed do
   on roles(:app) do
-    within current_path do
         info "🚀 Force seeding database..."
         execute :bundle, :exec, :rake, "db:seed"
 
         # Verificar resultado
         result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
         info "✅ Seed completed! Total users: #{result.strip}"
-    end
   end
 end
 
 desc "Show database statistics"
   task :db_stats do
     on roles(:app) do
-      within current_path do
           users = capture(:bundle, :exec, :rails, :runner, "puts User.count")
           degree_dependents = capture(:bundle, :exec, :rails, :runner, "puts DegreeDependent.count")
           type_documents = capture(:bundle, :exec, :rails, :runner, "puts TypeDocument.count")
@@ -126,14 +123,12 @@ desc "Show database statistics"
           info "   Users: #{users.strip}"
           info "   DegreeDependent: #{degree_dependents.strip}"
           info "   TypeDocument: #{type_documents.strip}"
-      end
     end
   end
 
  desc "Seed database only if empty"
   task :seed_if_empty do
     on roles(:app) do
-      within current_path do
           # Verificar quantidade de usuários
           result = capture(:bundle, :exec, :rails, :runner, "puts User.count")
           user_count = result.strip.to_i
@@ -150,27 +145,22 @@ desc "Show database statistics"
           else
             info "⏭️  Database has #{user_count} users, skipping seed"
           end
-      end
     end
   end
 
  desc "Clear Rails cache"
   task :clear_cache do
     on roles(:app) do
-      within current_path do
           execute :bundle, :exec, :rake, "cache:clear"
           info "🧹 Rails cache cleared!"
-      end
     end
   end
 
   desc "Check migrations status"
    task :check_migrations do
     on roles(:app) do
-      within current_path do
           result = capture(:bundle, :exec, :rake, "db:migrate:status")
           info "📊 Migrations status:\n#{result}"
-      end
     end
   end
 end
