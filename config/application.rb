@@ -52,15 +52,15 @@ module ApiServices
       }
     end
 
-    config.after_initialize do
-      Rails.application.routes.append do
-        match "/404", to: "errors#not_found", via: :all
-        match "/500", to: "errors#internal_server_error", via: :all
-        match "/422", to: "errors#unprocessable_entity", via: :all
-        match "/401", to: "errors#unauthorized", via: :all
-        match "/403", to: "errors#forbidden", via: :all
-      end
-    end
+    # config.after_initialize do
+    #   Rails.application.routes.append do
+    #     match "/404", to: "errors#not_found", via: :all
+    #     match "/500", to: "errors#internal_server_error", via: :all
+    #     match "/422", to: "errors#unprocessable_entity", via: :all
+    #     match "/401", to: "errors#unauthorized", via: :all
+    #     match "/403", to: "errors#forbidden", via: :all
+    #   end
+    # end
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
