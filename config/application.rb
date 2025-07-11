@@ -29,19 +29,20 @@ module ApiServices
 
     config.active_job.queue_adapter = :sidekiq
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
-    # Rails.application.config.middleware.use Warden::Manager do |manager|
-    #   manager.failure_app = ->(env) {
-    #     Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
-    #     [ 401, { "Content-Type" => "application/json" }, [ { error: "Unauthorized" }.to_json ] ]
-    #   }
-    # end
+     # Configuration for the application, engines, and railties goes here.
+     #
+     # These settings can be overridden in specific environments using the files
+     # in config/environments, which are processed later.
+     #
+     # config.time_zone = "Central Time (US & Canada)"
+     # config.eager_load_paths << Rails.root.join("extras")
+     #
+     Rails.application.config.middleware.use Warden::Manager do |manager|
+       manager.failure_app = ->(env) {
+         Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
+         [ 401, { "Content-Type" => "application/json" }, [ { error: "Unauthorized" }.to_json ] ]
+       }
+     end
 
     # Rails.application.config.middleware.use Warden::Manager do |manager|
     #    manager.failure_app = ->(env) {
@@ -51,12 +52,6 @@ module ApiServices
     #    [ 401, { "Content-Type" => "application/json" }, [ response_body ] ]
     #   }
     # end
-
-    # ✅ SSL headers
-    config.force_ssl = true if Rails.env.production?
-
-    # ✅ Secure headers
-    config.middleware.use Rack::SSL if Rails.env.production?
 
     # config.after_initialize do
     #   Rails.application.routes.append do
