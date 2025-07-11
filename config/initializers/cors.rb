@@ -6,21 +6,29 @@
  # Read more: https://github.com/cyu/rack-cors
 
  Rails.application.config.middleware.insert_before 0, Rack::Cors do
+   # allow do
+   #   origins "https://web.sysdjamsofthouse.com.br"
+   #   resource "*",
+   #     headers: :any,
+   #     methods: [ :get, :post, :put, :patch, :delete, :options, :head ],
+   #     expose: [
+   #      "access-token",
+   #      "expiry",
+   #      "token-type",
+   #      "Authorization",
+   #      "uid",
+   #      "client",
+   #      "X-User-Email",
+   #      "X-User-Token"
+   #     ],
+   #     credentials: true
+   # end
    allow do
-     origins "https://web.sysdjamsofthouse.com.br"
-     resource "*",
-       headers: :any,
-       methods: [ :get, :post, :put, :patch, :delete, :options, :head ],
-       expose: [
-        "access-token",
-        "expiry",
-        "token-type",
-        "Authorization",
-        "uid",
-        "client",
-        "X-User-Email",
-        "X-User-Token"
-       ],
-       credentials: true
+    origins "*"
+
+    resource "*",
+      headers: :any,
+      methods: :any,
+      credentials: false
    end
  end

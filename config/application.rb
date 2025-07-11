@@ -43,14 +43,14 @@ module ApiServices
     #   }
     # end
 
-    Rails.application.config.middleware.use Warden::Manager do |manager|
-       manager.failure_app = ->(env) {
-       Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
-       # ✅ CORREÇÃO: Body deve ser array de strings, não array de hashes
-       response_body = { error: "Unauthorized" }.to_json
-       [ 401, { "Content-Type" => "application/json" }, [ response_body ] ]
-      }
-    end
+    # Rails.application.config.middleware.use Warden::Manager do |manager|
+    #    manager.failure_app = ->(env) {
+    #    Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
+    #    # ✅ CORREÇÃO: Body deve ser array de strings, não array de hashes
+    #    response_body = { error: "Unauthorized" }.to_json
+    #    [ 401, { "Content-Type" => "application/json" }, [ response_body ] ]
+    #   }
+    # end
 
     # config.after_initialize do
     #   Rails.application.routes.append do
