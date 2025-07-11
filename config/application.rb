@@ -36,10 +36,19 @@ module ApiServices
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    # Rails.application.config.middleware.use Warden::Manager do |manager|
+    #   manager.failure_app = ->(env) {
+    #     Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
+    #     [ 401, { "Content-Type" => "application/json" }, [ { error: "Unauthorized" }.to_json ] ]
+    #   }
+    # end
+
     Rails.application.config.middleware.use Warden::Manager do |manager|
-      manager.failure_app = ->(env) {
-        Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
-        [ 401, { "Content-Type" => "application/json" }, [ { error: "Unauthorized" }.to_json ] ]
+       manager.failure_app = ->(env) {
+       Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
+       # ✅ CORREÇÃO: Body deve ser array de strings, não array de hashes
+       response_body = { error: "Unauthorized" }.to_json
+       [ 401, { "Content-Type" => "application/json" }, [ response_body ] ]
       }
     end
 
