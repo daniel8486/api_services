@@ -1,32 +1,64 @@
-# frozen_string_literal: true
-
+# app/controllers/users/sessions_controller.rb
 class Users::SessionsController < Devise::SessionsController
   include RackSessionsFix
   respond_to :json
-  # before_action :configure_sign_in_params, only: [:create]
+
   private
+
   def respond_with(resource, _opts = {})
-   if resource.persisted?
+    if resource.persisted?
       @token = request.env["warden-jwt_auth.token"]
       headers["Authorization"] = @token
 
+      # ✅ CORREÇÃO: Evitar UserSerializer problemático
+      begin
+        # Tentar usar o serializer
+        user_data = UserSerializer.new(resource).serializable_hash
+        user_attributes = user_data.dig(:data, :attributes) || {}
+
+        # Se der erro, usar dados simples
+        user_attributes = {
+          id: resource.id,
+          email: resource.email,
+          role: resource.role,
+          cpf: resource.cpf
+        } if user_attributes.empty?
+
+      rescue => e
+        Rails.logger.error "❌ UserSerializer error: #{e.message}"
+        # Fallback para dados simples
+        user_attributes = {
+          id: resource.id,
+          email: resource.email,
+          role: resource.role,
+          cpf: resource.cpf
+        }
+      end
+
       render json: {
-      status: {
-        code: 200, message: "Logged in successfully.",
-        data: { user: UserSerializer.new(resource).serializable_hash[:data][:attributes] }
-      }
-    }, status: :ok
-   else
-    render json: {
-      status: 401,
-      message: "Invalid email or password."
-    }, status: :unauthorized
-   end
+        status: {
+          code: 200,
+          message: "Logged in successfully.",
+          data: { user: user_attributes }
+        }
+      }, status: :ok
+    else
+      render json: {
+        status: 401,
+        message: "Invalid email or password."
+      }, status: :unauthorized
+    end
   end
+
   def respond_to_on_destroy
     if request.headers["Authorization"].present?
-      jwt_payload = JWT.decode(request.headers["Authorization"].split(" ").last, Rails.application.credentials.devise_jwt_secret_key!).first
-      current_user = User.find(jwt_payload["sub"])
+      begin
+        jwt_payload = JWT.decode(request.headers["Authorization"].split(" ").last, Rails.application.credentials.devise_jwt_secret_key!).first
+        current_user = User.find(jwt_payload["sub"])
+      rescue JWT::DecodeError, ActiveRecord::RecordNotFound => e
+        Rails.logger.error "❌ JWT decode error: #{e.message}"
+        current_user = nil
+      end
     end
 
     if current_user
@@ -41,40 +73,4 @@ class Users::SessionsController < Devise::SessionsController
       }, status: :unauthorized
     end
   end
-
-  def is_valid_token
-    if current_user
-      render json: {
-        status: 200,
-        message: "Token válido",
-        user: UserSerializer.new(current_user).serializable_hash[:data][:attributes]
-      }, status: :ok
-    else
-      render json: {
-        status: 401,
-        message: "Token inválido ou expirado."
-      }, status: :unauthorized
-    end
-  end
-  # GET /resource/sign_in
-  # def new
-  #   super
-  # end
-
-  # POST /resource/sign_in
-  # def create
-  #   super
-  # end
-
-  # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
-
-  # protected
-
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_in_params
-  #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
-  # end
 end
