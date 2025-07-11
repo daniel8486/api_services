@@ -40,7 +40,8 @@ module ApiServices
      Rails.application.config.middleware.use Warden::Manager do |manager|
        manager.failure_app = ->(env) {
          Rails.logger.info "Warden failure: #{env['warden.options'].inspect}"
-         [ 401, { "Content-Type" => "application/json" }, [ { error: "Unauthorized" }.to_json ] ]
+         response_body = { error: "Unauthorized" }.to_json
+         [ 401, { "Content-Type" => "application/json" }, [ response_body ] ]
        }
      end
 
