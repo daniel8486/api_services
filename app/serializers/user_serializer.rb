@@ -1,18 +1,8 @@
-# app/serializers/user_serializer.rb
 class UserSerializer
   include JSONAPI::Serializer
+  attributes :id, :email, :name, :cpf, :role, :avatar
+  belongs_to :company, serializer: CompanySerializer
 
-  attributes :id, :email, :role, :cpf, :created_at, :updated_at
-
-  # ✅ CORREÇÃO: Garantir que não retorne arrays
-  def self.serialize(user)
-    {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      cpf: user.cpf,
-      created_at: user.created_at,
-      updated_at: user.updated_at
-    }
-  end
+  attribute :adimplencia, if: Proc.new { |user| user.client? }
+  attribute :inadimplencia, if: Proc.new { |user| user.client? }
 end
