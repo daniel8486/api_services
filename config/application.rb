@@ -52,6 +52,12 @@ module ApiServices
     #   }
     # end
 
+    # ✅ SSL headers
+    config.force_ssl = true if Rails.env.production?
+
+    # ✅ Secure headers
+    config.middleware.use Rack::SSL if Rails.env.production?
+
     # config.after_initialize do
     #   Rails.application.routes.append do
     #     match "/404", to: "errors#not_found", via: :all
