@@ -9,13 +9,23 @@
    allow do
      origins [
       "https://web.sysdjamsofthouse.com.br",
-      "http://localhost:3000"
+      "http://localhost:3000",
+      "http://localhost:3001"
     ]
 
      resource "*",
        headers: :any,
        methods: [ :get, :post, :put, :patch, :delete, :options, :head ],
-       expose: [ "access-token", "expiry", "token-type", "Authorization" ],
+       expose: [
+        "access-token",
+        "expiry",
+        "token-type",
+        "Authorization",
+        "uid",
+        "client",
+        "X-User-Email",
+        "X-User-Token"
+       ],
        credentials: true
    end
  end
