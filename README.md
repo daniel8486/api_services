@@ -96,12 +96,7 @@ end
 
 ---
 
-## Como contribuir
-
-1. Siga os padrões de organização e nomenclatura do projeto.
-2. Escreva testes para novas funcionalidades.
-3. Mantenha controllers enxutos e delegue lógica para services/models.
-4. Sempre utilize serializers para formatar respostas JSON.
+## Aplicando SOLID ,Design Patterns ,Clean Code e Testes Automatizados 
 
 ---
 
