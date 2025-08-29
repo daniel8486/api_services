@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_24_173524) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_30_191304) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -209,6 +209,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_173524) do
     t.index ["contract_id"], name: "index_installments_on_contract_id"
   end
 
+  create_table "money_boxes", force: :cascade do |t|
+    t.decimal "opening_value"
+    t.decimal "closing_value"
+    t.bigint "user_id", null: false
+    t.decimal "withdrawal_cash"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_money_boxes_on_user_id"
+  end
+
   create_table "neighborhoods", force: :cascade do |t|
     t.string "name"
     t.bigint "city_id", null: false
@@ -305,6 +316,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_24_173524) do
   add_foreign_key "email_deliveries", "clients"
   add_foreign_key "email_deliveries", "contracts"
   add_foreign_key "installments", "contracts"
+  add_foreign_key "money_boxes", "users"
   add_foreign_key "neighborhoods", "cities"
   add_foreign_key "pending_import_tables", "users"
   add_foreign_key "plans", "companies"
