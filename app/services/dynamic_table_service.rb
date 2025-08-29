@@ -3,7 +3,7 @@ class DynamicTableService
     schema = "temp"
     full_table_name = "#{schema}.#{table_name}"
 
-    # Cria o schema se não existir
+    
     ActiveRecord::Base.connection.execute("CREATE SCHEMA IF NOT EXISTS #{schema}")
 
     return if ActiveRecord::Base.connection.data_source_exists?(full_table_name)
