@@ -17,7 +17,7 @@ class User < ApplicationRecord
   validate :company_presence_unless_super_admin
   validate :only_one_admin_per_company, if: -> { admin? && company_id.present? }, on: :create
 
-  enum :role, { user: 0, admin: 1, client: 2, super_admin: 3, super_root: 4 }
+  enum :role, { user: 0, admin: 1, client: 2, super_admin: 3, super_root: 4 }, default: :user
 
   after_initialize do
     self.role = :user if new_record? && self.role.blank?

@@ -16,7 +16,7 @@ class Ability
       can :manage, User, company_id: user.company_id, role: %w[user admin client]
       can :read, Company, id: user.company_id
       can :manage, Client, company_id: user.company_id if defined?(Client)
-   
+
       can :manage, Plan, company_id: user.company_id
       can :manage, Campaign, company_id: user.company_id
       can :manage, Contract, company_id: user.company_id

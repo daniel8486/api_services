@@ -6,8 +6,7 @@ class ContractPdfsService
     end
 
     def generate
-    
-      case @contract.company.try(:slug) 
+      case @contract.company.try(:slug)
       when "empresa_x"
         generate_empresa_x_pdf
       else

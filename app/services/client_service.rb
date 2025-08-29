@@ -1,5 +1,4 @@
 class ClientService
-
   def self.serialize_client(client)
    result =  ClientSerializer.new(
       client,
@@ -9,11 +8,11 @@ class ClientService
         :addresses,
         :documents,
         :company,
-        "documents.type_document" 
+        "documents.type_document"
       ]
     ).serializable_hash
 
-    
+
     if result[:included]
       order = %w[dependent affiliation address document type_document company]
       result[:included].sort_by! { |item| order.index(item[:type]) || 99 }
@@ -22,7 +21,7 @@ class ClientService
     result
   end
 
- 
+
   def self.serialize_clients(clients)
     result = ClientSerializer.new(
       clients,
@@ -32,11 +31,11 @@ class ClientService
         :addresses,
         :documents,
         :company,
-        "documents.type_document" 
+        "documents.type_document"
       ]
     ).serializable_hash
 
-   
+
     if result[:included]
       order = %w[dependent affiliation address document type_document company]
       result[:included].sort_by! { |item| order.index(item[:type]) || 99 }
@@ -45,7 +44,7 @@ class ClientService
     result
   end
 
- 
+
   def self.fetch_address_by_cep(cep)
     Rails.cache.fetch("cep:#{cep}", expires_in: 24.hours) do
       response = Faraday.get("https://viacep.com.br/ws/#{cep}/json/")
@@ -53,7 +52,7 @@ class ClientService
     end
   end
 
-  
+
    def self.build_with_address(params)
      cep = params[:code_postal] || params[:cep]
      address_data = fetch_address_by_cep(cep)
