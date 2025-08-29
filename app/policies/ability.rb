@@ -16,7 +16,7 @@ class Ability
       can :manage, User, company_id: user.company_id, role: %w[user admin client]
       can :read, Company, id: user.company_id
       can :manage, Client, company_id: user.company_id if defined?(Client)
-      # Adicione outras permissões específicas para admin aqui
+   
       can :manage, Plan, company_id: user.company_id
       can :manage, Campaign, company_id: user.company_id
       can :manage, Contract, company_id: user.company_id
@@ -35,7 +35,7 @@ class Ability
     elsif user.client?
       # Cliente só pode ler/atualizar o próprio cadastro
       can [ :read, :update ], User, id: user.id
-      # Pode ler sua própria fatura, se existir esse recurso
+      # Pode ler sua própria fatura
       can :read, Invoice, user_id: user.id if defined?(Invoice)
       can :read, Contract, client_id: user.id
     end
