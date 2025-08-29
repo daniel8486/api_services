@@ -15,8 +15,8 @@ Este projeto é uma API backend desenvolvida em Ruby on Rails, estruturada para 
 - **responses/**: Monta respostas customizadas para endpoints específicos.
 - **jobs/**: Tarefas assíncronas (ex: atualização de cache).
 - **validators/**: Validadores customizados para atributos específicos.
-- **uploaders/**: Upload e processamento de arquivos (ex: avatar).
-- **policies/**: Autorização granular por recurso.
+- **uploaders/**: Upload e processamento de arquivos.
+- **policies/**: Autorização por recurso.
 
 ---
 
