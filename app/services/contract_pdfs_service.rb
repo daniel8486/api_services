@@ -6,8 +6,8 @@ class ContractPdfsService
     end
 
     def generate
-      # Aqui você pode customizar por empresa:
-      case @contract.company.try(:slug) # ou outro identificador único
+    
+      case @contract.company.try(:slug) 
       when "empresa_x"
         generate_empresa_x_pdf
       else
@@ -19,7 +19,6 @@ class ContractPdfsService
 
     def generate_default_pdf
         Prawn::Document.new do |pdf|
-      # Insere a imagem do logo (ajuste o caminho se necessário)
       # logo_path = Rails.root.join("app/assets/images/logo.png")
       # pdf.image logo_path, width: 100 if File.exist?(logo_path)
       # pdf.move_down 10
@@ -38,7 +37,7 @@ class ContractPdfsService
       pdf.text "Detalhes: #{@contract.details}"
       pdf.move_down 10
 
-      # Tabela de parcelas (se houver)
+      # Tabela de parcelas
       if @contract.respond_to?(:parcelas_json) && @contract.parcelas_json.any?
         pdf.text "Parcelas:", style: :bold
         data = [ [ "Nº", "Valor", "Vencimento" ] ]
