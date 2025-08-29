@@ -1,7 +1,7 @@
 class ClientComparatorService
   def self.compare(imported_data)
     imported_data.map do |row|
-      client = Client.find_by(cpf: row["cpf"]) # ajuste o campo conforme necessário
+      client = Client.find_by(cpf: row["cpf"]) 
       {
         imported: row,
         exists: client.present?,
