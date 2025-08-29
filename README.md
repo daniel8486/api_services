@@ -96,7 +96,7 @@ end
 
 ---
 
-## Aplicando SOLID ,Design Patterns ,Clean Code e Testes Automatizados 
+## Aplicando SOLID ,Design Patterns ,Clean Code e Testes Automatizados. 
 
 ---
 
