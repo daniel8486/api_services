@@ -10,7 +10,7 @@ class Users::SessionsController < Devise::SessionsController
       @token = request.env["warden-jwt_auth.token"]
       headers["Authorization"] = @token
 
-      # ✅ CORREÇÃO: Evitar UserSerializer problemático
+      # Evitar UserSerializer problemático
       begin
         # Tentar usar o serializer
         user_data = UserSerializer.new(resource).serializable_hash
@@ -25,7 +25,7 @@ class Users::SessionsController < Devise::SessionsController
         } if user_attributes.empty?
 
       rescue => e
-        Rails.logger.error "❌ UserSerializer error: #{e.message}"
+        Rails.logger.error "UserSerializer error: #{e.message}"
         # Fallback para dados simples
         user_attributes = {
           id: resource.id,
@@ -56,7 +56,7 @@ class Users::SessionsController < Devise::SessionsController
         jwt_payload = JWT.decode(request.headers["Authorization"].split(" ").last, Rails.application.credentials.devise_jwt_secret_key!).first
         current_user = User.find(jwt_payload["sub"])
       rescue JWT::DecodeError, ActiveRecord::RecordNotFound => e
-        Rails.logger.error "❌ JWT decode error: #{e.message}"
+        Rails.logger.error "JWT decode error: #{e.message}"
         current_user = nil
       end
     end
