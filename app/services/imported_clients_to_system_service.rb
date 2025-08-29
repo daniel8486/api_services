@@ -11,7 +11,6 @@ class ImportedClientsToSystemService
           email: row["email"],
           cpf: row["cpf"],
           company_id: row["company_id"]
-          # outros campos conforme necessário
         )
       end
     end
