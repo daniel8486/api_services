@@ -36,7 +36,7 @@ class Api::V1::CitiesController < ApplicationController
   def index
     @cities = City.includes(:state).all
 
-    # ✅ CORREÇÃO: Response simples
+    # Response simples
     render json: {
       data: @cities.map do |city|
         {
@@ -54,7 +54,7 @@ class Api::V1::CitiesController < ApplicationController
   def show
     @city = City.includes(:state, :neighborhoods, :zips).find(params[:id])
 
-    # ✅ CORREÇÃO: Response simples
+    #  Response simples
     render json: {
       data: {
         id: @city.id,
@@ -74,7 +74,7 @@ class Api::V1::CitiesController < ApplicationController
   def search
     @cities = City.includes(:state).where("name ILIKE ?", "%#{params[:q]}%")
 
-    # ✅ CORREÇÃO: Response simples
+    # Response simples
     render json: {
       data: @cities.map do |city|
         {
