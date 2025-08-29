@@ -4,10 +4,8 @@ class DocumentSerializer
 
   attribute :files_url do |object|
     if object.files.present?
-      # Se for caminho relativo, transformar em URL completa
       url = object.files.url
       if url.start_with?("/")
-        # Para desenvolvimento local
         host = Rails.env.development? ? "http://localhost:3000" : "https://seudominio.com"
         "#{host}#{url}"
       else
