@@ -4,8 +4,6 @@
 
 Este projeto é uma API backend desenvolvida em Ruby on Rails, estruturada para ser escalável, modular e de fácil manutenção, seguindo princípios de Clean Code e SRP (Single Responsibility Principle). O sistema gerencia usuários, empresas, cidades, bairros, estados e CEPs, com regras de negócio robustas e controle de acesso por perfil.
 
----
-
 ## Estrutura de Pastas
 
 - **controllers/**: Orquestra as requisições HTTP e delega lógica para services e models.
@@ -17,8 +15,6 @@ Este projeto é uma API backend desenvolvida em Ruby on Rails, estruturada para 
 - **validators/**: Validadores customizados para atributos específicos.
 - **uploaders/**: Upload e processamento de arquivos.
 - **policies/**: Autorização por recurso.
-
----
 
 ## Regras de Negócio
 
@@ -47,7 +43,6 @@ Este projeto é uma API backend desenvolvida em Ruby on Rails, estruturada para 
 - Endpoints para busca por nome, CEP e sigla do estado.
 - Respostas customizadas podem ser montadas via services (ex: CityResponseService).
 
----
 
 ## Lógica e Técnicas Utilizadas
 
