@@ -56,7 +56,6 @@ Este projeto é uma API backend desenvolvida em Ruby on Rails, estruturada para 
 - **Dotenv**: Gerenciamento de variáveis de ambiente.
 - **Testes**: Estrutura pronta para RSpec, FactoryBot, Shoulda Matchers, etc.
 
----
 
 ## Padrões de Programação
 
@@ -66,7 +65,6 @@ Este projeto é uma API backend desenvolvida em Ruby on Rails, estruturada para 
 - **RESTful**: Endpoints seguem padrão REST.
 - **N+1 Query Prevention**: Uso de `includes` para otimizar consultas com associações.
 
----
 
 ## Exemplos de Uso
 
@@ -89,17 +87,13 @@ def search
 end
 ```
 
----
-
 ## Aplicando SOLID ,Design Patterns ,Clean Code e Testes Automatizados. 
 
----
 
 ## Dúvidas
 
 Consulte os arquivos em `services/`, `serializers/` e os controllers para exemplos de uso.  
 Para dúvidas sobre regras de negócio, consulte este arquivo ou a documentação dos models.
 
----
 
 ## Criado por Daniel Djam
