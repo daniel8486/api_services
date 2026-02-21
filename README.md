@@ -65,7 +65,6 @@ Este projeto é uma API backend desenvolvida em Ruby on Rails, estruturada para 
 - **RESTful**: Endpoints seguem padrão REST.
 - **N+1 Query Prevention**: Uso de `includes` para otimizar consultas com associações.
 
-
 ## Exemplos de Uso
 
 ### Serialização customizada via Service
@@ -77,7 +76,6 @@ def show
   render json: CityResponseService.city_details(city)
 end
 ```
-
 ### Busca de cidades por nome
 
 ```ruby
@@ -89,11 +87,9 @@ end
 
 ## Aplicando SOLID ,Design Patterns ,Clean Code e Testes Automatizados. 
 
-
 ## Dúvidas
 
 Consulte os arquivos em `services/`, `serializers/` e os controllers para exemplos de uso.  
 Para dúvidas sobre regras de negócio, consulte este arquivo ou a documentação dos models.
-
 
 ## Criado por Daniel Djam
