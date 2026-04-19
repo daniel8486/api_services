@@ -94,8 +94,4 @@ Para dúvidas sobre regras de negócio, consulte este arquivo ou a documentaçã
 
 ##
 
-##
-
-##
-
 ## Criado por Daniel Djam
