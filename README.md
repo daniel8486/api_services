@@ -93,3 +93,5 @@ Consulte os arquivos em `services/`, `serializers/` e os controllers para exempl
 Para dúvidas sobre regras de negócio, consulte este arquivo ou a documentação dos models.
 
 ## Criado por Daniel Djam
+
+##
